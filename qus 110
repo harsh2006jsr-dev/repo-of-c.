@@ -1,0 +1,158 @@
+Q110: Write a program to take an integer array arr and an integer k as inputs. The task is to find the maximum element in each subarray of size k moving from left to right. Print the maximum elements for each window separated by spaces as output.
+
+/*
+Sample Test Cases:
+Input 1:
+arr[1, 2, 3, 1, 4, 5, 2, 3, 6] = , k = 3
+Output 1:
+3 3 4 5 5 5 6
+
+Input 2:
+arr[5, 1, 3, 4, 2] = , k = 1
+Output 2:
+5 1 3 4 2
+
+*/
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct DequeueNode 
+{
+    int data;              
+    struct DequeueNode* next;
+    struct DequeueNode* prev;
+} DequeueNode;
+typedef struct Dequeue 
+{
+    DequeueNode* front;
+    DequeueNode* rear;
+} Dequeue;
+Dequeue* createDequeue() 
+{
+    Dequeue* dq = (Dequeue*)malloc(sizeof(Dequeue));
+    if (dq == NULL) {
+        perror("Failed to allocate memory for Dequeue");
+        exit(EXIT_FAILURE);
+    }
+    dq->front = NULL;
+    dq->rear = NULL;
+    return dq;
+}
+int isEmpty(Dequeue* dq) 
+{
+    return dq->front == NULL;
+}
+void insertRear(Dequeue* dq, int index) 
+{
+    DequeueNode* newNode = (DequeueNode*)malloc(sizeof(DequeueNode));
+    if (newNode == NULL) 
+    {
+        perror("Failed to allocate memory for DequeueNode");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = index;
+    newNode->next = NULL;
+    newNode->prev = dq->rear;
+    if (isEmpty(dq)) 
+    {
+        dq->front = newNode;
+        dq->rear = newNode;
+    } 
+    else 
+    {
+        dq->rear->next = newNode;
+        dq->rear = newNode;
+    }
+}
+void removeFront(Dequeue* dq) 
+{
+    if (isEmpty(dq)) return;
+    DequeueNode* temp = dq->front;
+    dq->front = dq->front->next;
+    
+    if (dq->front == NULL) 
+    {
+        dq->rear = NULL; 
+    } 
+    else 
+    {
+        dq->front->prev = NULL;
+    }
+    free(temp);
+}
+void removeRear(Dequeue* dq) 
+{
+    if (isEmpty(dq)) return;
+    DequeueNode* temp = dq->rear;
+    dq->rear = dq->rear->prev;
+    if (dq->rear == NULL) 
+    {
+        dq->front = NULL; 
+    } 
+    else 
+    {
+        dq->rear->next = NULL;
+    }
+    free(temp);
+}
+int getFront(Dequeue* dq) 
+{
+    if (isEmpty(dq)) return -1; 
+    return dq->front->data;
+}
+int getRear(Dequeue* dq) 
+{
+    if (isEmpty(dq)) return -1;
+    return dq->rear->data;
+}
+void findMaxSlidingWindow(int arr[], int n, int k) 
+{
+    if (n <= 0 || k <= 0 || k > n) 
+    {
+        return; 
+    }
+    Dequeue* dq = createDequeue();
+    int i;
+    for (i = 0; i < k; i++) 
+    {
+        while (!isEmpty(dq) && arr[i] >= arr[getRear(dq)]) 
+        {
+            removeRear(dq);
+        }
+        insertRear(dq, i);
+    }
+    for (; i < n; i++) 
+    {
+        printf("%d ", arr[getFront(dq)]);
+        while (!isEmpty(dq) && getFront(dq) <= i - k) 
+        {
+            removeFront(dq);
+        }
+        while (!isEmpty(dq) && arr[i] >= arr[getRear(dq)]) 
+        {
+            removeRear(dq);
+        }
+        insertRear(dq, i);
+    }
+    printf("%d\n", arr[getFront(dq)]);
+    while (!isEmpty(dq)) 
+    {
+        removeFront(dq);
+    }
+    free(dq);
+}
+int main() 
+{
+    int arr1[] = {1, 2, 3, 1, 4, 5, 2, 3, 6};
+    int n1 = sizeof(arr1) / sizeof(arr1[0]);
+    int k1 = 3;
+    printf("Input 1:\narr = [1, 2, 3, 1, 4, 5, 2, 3, 6], k = 3\n");
+    printf("Output 1:\n");
+    findMaxSlidingWindow(arr1, n1, k1); 
+    int arr2[] = {5, 1, 3, 4, 2};
+    int n2 = sizeof(arr2) / sizeof(arr2[0]);
+    int k2 = 1;
+    printf("\nInput 2:\narr = [5, 1, 3, 4, 2], k = 1\n");
+    printf("Output 2:\n");
+    findMaxSlidingWindow(arr2, n2, k2); 
+    return 0;
+}

@@ -1,0 +1,123 @@
+Q116: Write a program to take an integer array nums which contains only positive integers, and an integer target as inputs. The goal is to find two distinct indices i and j in the array such that nums[i] + nums[j] equals the target. Assume exactly one solution exists and return the indices in any order. Print the two indices separated by a space as output. If no solution exists, print "-1 -1".
+
+/*
+Sample Test Cases:
+Input 1:
+nums = [2,7,11,15], target = 9
+Output 1:
+0 1
+
+Input 2:
+nums = [3,2,4], target = 6
+Output 2:
+1 2
+
+Input 3:
+nums = [3,3], target = 6
+Output 3:
+0 1
+
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+// A structure to hold the number and its original index
+typedef struct {
+    int value;
+    int index;
+} Element;
+
+// Comparison function for qsort to sort by value
+int compareElements(const void *a, const void *b) {
+    return ((Element *)a)->value - ((Element *)b)->value;
+}
+
+/**
+ * @brief Finds the indices of two numbers that sum up to the target.
+ * * @param nums The input array of positive integers.
+ * @param n The size of the array.
+ * @param target The target sum.
+ * @param result_indices An array of size 2 to store the result indices.
+ * @return int 1 if a solution is found, 0 otherwise.
+ */
+int twoSum(int nums[], int n, int target, int result_indices[2]) {
+    // 1. Create a copy of the array with original indices (O(N))
+    Element arr[n];
+    for (int i = 0; i < n; i++) {
+        arr[i].value = nums[i];
+        arr[i].index = i;
+    }
+
+    // 2. Sort the copied array by value (O(N log N))
+    qsort(arr, n, sizeof(Element), compareElements);
+
+    // 3. Use the Two-Pointer technique (O(N))
+    int left = 0;
+    int right = n - 1;
+
+    while (left < right) {
+        long long sum = (long long)arr[left].value + arr[right].value; // Use long long for safe summation
+
+        if (sum == target) {
+            // Solution found! Store the original indices.
+            result_indices[0] = arr[left].index;
+            result_indices[1] = arr[right].index;
+            return 1; // Success
+        } else if (sum < target) {
+            // Sum is too small, need a larger number. Move left pointer right.
+            left++;
+        } else { // sum > target
+            // Sum is too large, need a smaller number. Move right pointer left.
+            right--;
+        }
+    }
+
+    // 4. No solution found
+    return 0;
+}
+
+int main() {
+    // --- Sample Test Cases ---
+    
+    // Input 1: nums = [2,7,11,15], target = 9
+    int nums1[] = {2, 7, 11, 15};
+    int n1 = 4;
+    int target1 = 9;
+    int result1[2];
+
+    // Input 2: nums = [3,2,4], target = 6
+    int nums2[] = {3, 2, 4};
+    int n2 = 3;
+    int target2 = 6;
+    int result2[2];
+    
+    // Input 3: nums = [3,3], target = 6
+    int nums3[] = {3, 3};
+    int n3 = 2;
+    int target3 = 6;
+    int result3[2];
+    
+    // Input 4: No solution
+    int nums4[] = {1, 2, 3};
+    int n4 = 3;
+    int target4 = 10;
+    int result4[2];
+
+    // Function to print results
+    int success;
+    
+    success = twoSum(nums1, n1, target1, result1);
+    printf("Input 1: [2,7,11,15], Target=9 -> Output: %d %d\n", success ? result1[0] : -1, success ? result1[1] : -1);
+
+    success = twoSum(nums2, n2, target2, result2);
+    printf("Input 2: [3,2,4], Target=6 -> Output: %d %d\n", success ? result2[0] : -1, success ? result2[1] : -1);
+
+    success = twoSum(nums3, n3, target3, result3);
+    printf("Input 3: [3,3], Target=6 -> Output: %d %d\n", success ? result3[0] : -1, success ? result3[1] : -1);
+    
+    success = twoSum(nums4, n4, target4, result4);
+    printf("Input 4: [1,2,3], Target=10 -> Output: %d %d\n", success ? result4[0] : -1, success ? result4[1] : -1);
+
+
+    return 0;
+}

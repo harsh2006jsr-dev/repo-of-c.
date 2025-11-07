@@ -1,0 +1,73 @@
+Q112: Write a program to take an integer array arr as input. The task is to find the maximum sum of any contiguous subarray using Kadane's algorithm. Print the maximum sum as output. If all elements are negative, print the largest (least negative) element.
+
+/*
+Sample Test Cases:
+Input 1:
+arr[] = [2, 3, -8, 7, -1, 2, 3]
+Output 1:
+11
+
+Input 2:
+arr[] = [-2, -4]
+Output 2:
+-2
+
+Input 3:
+arr[] = [5, 4, 1, 7, 8]
+Output 3:
+25
+
+*/
+#include <stdio.h>
+#include <limits.h>
+int maxSubarraySum(int arr[], int n) {
+    if (n == 0) {
+        return 0;
+    }
+    long long overall_max = arr[0];
+    long long current_max = arr[0];
+    int all_negative_flag = (arr[0] < 0) ? 1 : 0;
+
+    long long largest_negative = arr[0]; 
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > current_max + arr[i]) {
+            current_max = arr[i];
+        } else {
+            current_max = current_max + arr[i];
+        }
+        if (current_max > overall_max) {
+            overall_max = current_max;
+        }
+        if (arr[i] >= 0) {
+            all_negative_flag = 0;
+        }
+    
+        if (arr[i] > largest_negative) {
+            largest_negative = arr[i];
+        }
+    }
+    if (all_negative_flag == 1) {
+        return (int)largest_negative;
+    }
+    return (int)overall_max;
+}
+
+int main() {
+    int arr1[] = {2, 3, -8, 7, -1, 2, 3};
+    int n1 = sizeof(arr1) / sizeof(arr1[0]);
+    int result1 = maxSubarraySum(arr1, n1);
+    printf("Input 1: [2, 3, -8, 7, -1, 2, 3], Max Sum: %d (Expected: 11)\n", result1);
+    int arr2[] = {-2, -4, -1, -5, -3};
+    int n2 = sizeof(arr2) / sizeof(arr2[0]);
+    int result2 = maxSubarraySum(arr2, n2);
+    printf("Input 2: [-2, -4, -1, -5, -3], Max Sum: %d (Expected: -1)\n", result2);
+    int arr2_b[] = {-2, -4};
+    int n2_b = sizeof(arr2_b) / sizeof(arr2_b[0]);
+    int result2_b = maxSubarraySum(arr2_b, n2_b);
+    printf("Input 2 (Original): [-2, -4], Max Sum: %d (Expected: -2)\n", result2_b);
+    int arr3[] = {5, 4, 1, 7, 8};
+    int n3 = sizeof(arr3) / sizeof(arr3[0]);
+    int result3 = maxSubarraySum(arr3, n3);
+    printf("Input 3: [5, 4, 1, 7, 8], Max Sum: %d (Expected: 25)\n", result3);
+    return 0;
+}

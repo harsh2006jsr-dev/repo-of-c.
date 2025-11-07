@@ -1,0 +1,100 @@
+Q115: Write a program to take two strings s and t as inputs (assume all characters are lowercase). The task is to determine if s and t are valid anagrams, meaning they contain the same characters with the same frequencies. Print "Anagram" if they are, otherwise "Not Anagram".
+
+/*
+Sample Test Cases:
+Input 1:
+s = "anagram", t = "nagaram"
+Output 1:
+Anagram
+
+Input 2:
+s = "rat", t = "car"
+Output 2:
+Not Anagram
+
+*/
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+/**
+ * @brief Determines if two strings are valid anagrams.
+ *
+ * @param s The first string.
+ * @param t The second string.
+ * @return true if s and t are anagrams, false otherwise.
+ */
+bool isAnagram(char *s, char *t) {
+    // A quick check: If lengths are different, they cannot be anagrams.
+    if (strlen(s) != strlen(t)) {
+        return false;
+    }
+
+    // Since all characters are lowercase English letters ('a' through 'z'),
+    // an array of size 26 is sufficient to store frequencies.
+    int counts[26] = {0}; // Initialize all counts to 0
+
+    // --- Step 1: Count characters in string s ---
+    // For each character in s, increment its count in the array.
+    for (int i = 0; s[i] != '\0'; i++) {
+        // The index is calculated by subtracting the ASCII value of 'a'.
+        // e.g., 'a' - 'a' = 0, 'b' - 'a' = 1, etc.
+        counts[s[i] - 'a']++;
+    }
+
+    // --- Step 2: Decrement counts based on string t ---
+    // For each character in t, decrement its count in the array.
+    for (int i = 0; t[i] != '\0'; i++) {
+        counts[t[i] - 'a']--;
+    }
+
+    // --- Step 3: Check the final counts ---
+    // If s and t are anagrams, every counter in the array must be zero.
+    for (int i = 0; i < 26; i++) {
+        if (counts[i] != 0) {
+            return false; // Found a character with an unequal frequency
+        }
+    }
+
+    // If we reach here, all checks passed.
+    return true;
+}
+
+int main() {
+    // --- Sample Test Cases ---
+    
+    // Input 1: Anagrams
+    char s1[] = "anagram";
+    char t1[] = "nagaram";
+    
+    // Input 2: Not Anagrams
+    char s2[] = "rat";
+    char t2[] = "car";
+
+    // Input 3: Different Lengths (Not Anagram)
+    char s3[] = "hello";
+    char t3[] = "hell";
+
+    // Test Case 1
+    if (isAnagram(s1, t1)) {
+        printf("Input 1: s = \"%s\", t = \"%s\"\nOutput 1: Anagram\n", s1, t1);
+    } else {
+        printf("Input 1: s = \"%s\", t = \"%s\"\nOutput 1: Not Anagram\n", s1, t1);
+    }
+    
+    // Test Case 2
+    if (isAnagram(s2, t2)) {
+        printf("Input 2: s = \"%s\", t = \"%s\"\nOutput 2: Anagram\n", s2, t2);
+    } else {
+        printf("Input 2: s = \"%s\", t = \"%s\"\nOutput 2: Not Anagram\n", s2, t2);
+    }
+    
+    // Test Case 3
+    if (isAnagram(s3, t3)) {
+        printf("Input 3: s = \"%s\", t = \"%s\"\nOutput 3: Anagram\n", s3, t3);
+    } else {
+        printf("Input 3: s = \"%s\", t = \"%s\"\nOutput 3: Not Anagram\n", s3, t3);
+    }
+
+    return 0;
+}

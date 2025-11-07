@@ -1,0 +1,122 @@
+Q117: Write a program to take two sorted arrays of size m and n as input. Merge both the arrays such that the merged array is also sorted. Print the merged array.
+
+/*
+Sample Test Cases:
+Input 1:
+nums1 = [2,7,11,15] nums2 = [4,8,10]
+Output 1:
+2 4 7 8 10 11 15
+
+Input 2:
+nums1 = [1,2,7] nums2 = [9,10,17]
+Output 2:
+1 2 7 9 10 17
+
+Input 3:
+nums1 = [-10,-2,7] nums2 = [-3, -1, 7]
+Output 3:
+-10 -3 -2 -1 7 7
+
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+/**
+ * @brief Merges two sorted arrays into a new sorted array.
+ *
+ * @param nums1 The first sorted array.
+ * @param m The size of nums1.
+ * @param nums2 The second sorted array.
+ * @param n The size of nums2.
+ * @param merged_array The pointer to store the resulting merged array.
+ * @return int The size of the merged array (m + n).
+ */
+int mergeSortedArrays(int nums1[], int m, int nums2[], int n, int *merged_array[]) {
+    int total_size = m + n;
+    
+    // Allocate memory for the merged array.
+    // Note: We use calloc to initialize memory to 0, though not strictly required here.
+    *merged_array = (int *)calloc(total_size, sizeof(int));
+    if (*merged_array == NULL) {
+        perror("Failed to allocate memory for merged array");
+        return 0;
+    }
+
+    // Pointers for the arrays:
+    int i = 0; // Pointer for nums1
+    int j = 0; // Pointer for nums2
+    int k = 0; // Pointer for the merged_array
+
+    // --- Core Merge Logic ---
+    // Compare elements from both arrays and put the smaller one into the merged array.
+    while (i < m && j < n) {
+        if (nums1[i] <= nums2[j]) {
+            (*merged_array)[k++] = nums1[i++];
+        } else {
+            (*merged_array)[k++] = nums2[j++];
+        }
+    }
+
+    // --- Transfer Remaining Elements ---
+    // If any elements are left in nums1 (only one of these loops will run)
+    while (i < m) {
+        (*merged_array)[k++] = nums1[i++];
+    }
+
+    // If any elements are left in nums2
+    while (j < n) {
+        (*merged_array)[k++] = nums2[j++];
+    }
+
+    return total_size;
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d", arr[i]);
+        if (i < size - 1) {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int *merged = NULL;
+    int size;
+
+    // --- Input 1 ---
+    int nums1_1[] = {2, 7, 11, 15};
+    int m1 = sizeof(nums1_1) / sizeof(nums1_1[0]);
+    int nums2_1[] = {4, 8, 10};
+    int n1 = sizeof(nums2_1) / sizeof(nums2_1[0]);
+    
+    size = mergeSortedArrays(nums1_1, m1, nums2_1, n1, &merged);
+    printf("Input 1: Merged Array:\n");
+    printArray(merged, size);
+    free(merged); merged = NULL; // Cleanup
+
+    // --- Input 2 ---
+    int nums1_2[] = {1, 2, 7};
+    int m2 = sizeof(nums1_2) / sizeof(nums1_2[0]);
+    int nums2_2[] = {9, 10, 17};
+    int n2 = sizeof(nums2_2) / sizeof(nums2_2[0]);
+
+    size = mergeSortedArrays(nums1_2, m2, nums2_2, n2, &merged);
+    printf("\nInput 2: Merged Array:\n");
+    printArray(merged, size);
+    free(merged); merged = NULL; // Cleanup
+
+    // --- Input 3 ---
+    int nums1_3[] = {-10, -2, 7};
+    int m3 = sizeof(nums1_3) / sizeof(nums1_3[0]);
+    int nums2_3[] = {-3, -1, 7};
+    int n3 = sizeof(nums2_3) / sizeof(nums2_3[0]);
+
+    size = mergeSortedArrays(nums1_3, m3, nums2_3, n3, &merged);
+    printf("\nInput 3: Merged Array:\n");
+    printArray(merged, size);
+    free(merged); merged = NULL; // Cleanup
+
+    return 0;
+}

@@ -1,0 +1,113 @@
+Q114: Write a program to take a string s as input. The task is to find the length of the longest substring without repeating characters. Print the length as output.
+
+/*
+Sample Test Cases:
+Input 1:
+s = "abcabcbb"
+Output 1:
+3
+
+Input 2:
+s = "bbbbb"
+Output 2:
+1
+
+Input 3:
+s = "pwwkew"
+Output 3:
+3
+
+*/
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h> // For max function (though we'll define our own)
+
+// Macro for finding the maximum of two numbers
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+/**
+ * @brief Finds the length of the longest substring without repeating characters.
+ *
+ * @param s The input string.
+ * @return int The length of the longest substring.
+ */
+int lengthOfLongestSubstring(char *s) {
+    if (s == NULL) {
+        return 0;
+    }
+
+    int n = strlen(s);
+    if (n == 0) {
+        return 0;
+    }
+
+    // 1. Sliding Window Pointers
+    int left = 0; // Start of the window
+    int right = 0; // End of the window
+    int max_len = 0;
+
+    // 2. Hash Map (or Frequency Array) for Character Tracking
+    // We use a fixed size array (ASCII_SIZE) to store the *index* where 
+    // each character was last seen. We assume ASCII characters (0-127 or 0-255).
+    // Initialize all to -1 (meaning "not seen").
+    #define ASCII_SIZE 128
+    int last_seen[ASCII_SIZE]; 
+    for (int i = 0; i < ASCII_SIZE; i++) {
+        last_seen[i] = -1;
+    }
+
+    // --- Slide the Window (right pointer moves) ---
+    while (right < n) {
+        char current_char = s[right];
+        
+        // Check if the current character is already in the window (seen at last_seen[current_char])
+        // If last_seen[current_char] >= left, it means the duplicate is *inside* the current window [left, right-1].
+        if (last_seen[current_char] >= left) {
+            // DUPLICATE FOUND: We must move the 'left' pointer to the position 
+            // *after* the last occurrence of the duplicate character.
+            left = last_seen[current_char] + 1;
+        }
+
+        // 1. Update the last seen index for the current character.
+        // This must be done whether a duplicate was found or not.
+        last_seen[current_char] = right;
+
+        // 2. Calculate the current window length (right - left + 1) and update max_len.
+        // The current length is simply (right - left). Since the loop condition
+        // increments 'right' after this, and the current 'right' is included,
+        // the current length is (right - left + 1) effectively.
+        // But since 'right' is the index we just processed, the distance is simply right - left.
+        max_len = MAX(max_len, right - left + 1);
+        
+        // 3. Move the right pointer to expand the window.
+        right++;
+    }
+
+    return max_len;
+}
+
+int main() {
+    // --- Sample Test Cases ---
+    
+    // Input 1: s = "abcabcbb"
+    char s1[] = "abcabcbb";
+    int result1 = lengthOfLongestSubstring(s1);
+    printf("Input 1: \"%s\" -> Output: %d (Expected: 3)\n", s1, result1);
+
+    // Input 2: s = "bbbbb"
+    char s2[] = "bbbbb";
+    int result2 = lengthOfLongestSubstring(s2);
+    printf("Input 2: \"%s\" -> Output: %d (Expected: 1)\n", s2, result2);
+
+    // Input 3: s = "pwwkew"
+    char s3[] = "pwwkew";
+    int result3 = lengthOfLongestSubstring(s3);
+    printf("Input 3: \"%s\" -> Output: %d (Expected: 3)\n", s3, result3);
+    
+    // Additional Test Case 4: Longest string
+    char s4[] = "dvdf"; // Should be 3 ("vdf")
+    int result4 = lengthOfLongestSubstring(s4);
+    printf("Input 4: \"%s\" -> Output: %d (Expected: 3)\n", s4, result4);
+
+    return 0;
+}

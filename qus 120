@@ -1,0 +1,92 @@
+Q120: Write a program to take a string input. Change it to sentence case.
+
+/*
+Sample Test Cases:
+Input 1:
+str = I am trying to build logic.
+Output 1:
+I Am Trying To Build Logic
+
+Input 2:
+str = The classes are supposed to start early.
+Output 2:
+The Classes Are Supposed To Start Early.
+
+Input 3:
+str = We are going to look at 26 different test cases.
+Output 3:
+We Are Going To Look At 26 Different Test Cases.
+
+*/
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h> // Required for tolower() and toupper()
+
+/**
+ * @brief Converts a string to Title Case (first letter of every word is capitalized).
+ *
+ * @param str The input string (modified in place).
+ */
+void convertToTitleCase(char *str) {
+    if (str == NULL || *str == '\0') {
+        return;
+    }
+
+    // Flag to track if the current character is the start of a new word.
+    // It is true at the start of the string.
+    int new_word = 1; 
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        char current_char = str[i];
+        
+        // 1. Check for a word separator (space, punctuation, etc.)
+        // We consider any non-alphabetic character a separator for simplicity.
+        // Based on the samples, we primarily focus on spaces.
+        if (isspace(current_char)) {
+            new_word = 1; // The next non-space character will be a new word
+        } 
+        // 2. Process a character within a word
+        else {
+            if (new_word) {
+                // This is the first letter of a word, so convert to uppercase.
+                str[i] = toupper((unsigned char)current_char);
+                new_word = 0; // Reset flag for the rest of the word
+            } else {
+                // This is a subsequent letter in a word, so convert to lowercase.
+                str[i] = tolower((unsigned char)current_char);
+            }
+        }
+    }
+}
+
+void runTestCase(const char *input) {
+    // Create a mutable copy of the input string since convertToTitleCase modifies it in place.
+    // Assuming max string length is 256 for this example.
+    char mutable_str[256];
+    strncpy(mutable_str, input, sizeof(mutable_str) - 1);
+    mutable_str[sizeof(mutable_str) - 1] = '\0'; // Ensure null termination
+
+    convertToTitleCase(mutable_str);
+    
+    printf("Input:  %s\n", input);
+    printf("Output: %s\n", mutable_str);
+    printf("------------------------------------------\n");
+}
+
+int main() {
+    // --- Sample Test Cases ---
+    
+    // Input 1: Note: Output is title-cased.
+    runTestCase("I am trying to build logic.");
+    
+    // Input 2: 
+    runTestCase("The classes are supposed to start early.");
+    
+    // Input 3: Handles numbers correctly
+    runTestCase("We are going to look at 26 different test cases.");
+
+    // Additional Test Case: Mixed case input
+    runTestCase("tHIS is a TEST case WITH mixed CASE.");
+    
+    return 0;
+}
