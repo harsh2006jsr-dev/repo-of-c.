@@ -1,0 +1,60 @@
+Q61: Search for an element in an array using linear search.
+
+/*
+Sample Test Cases:
+Input 1:
+5
+1 2 3 4 5
+3
+Output 1:
+Found at index 2
+
+Input 2:
+4
+10 20 30 40
+25
+Output 2:
+-1
+
+*/
+#include <stdio.h>
+int linearSearch(int arr[], int size, int key) 
+{
+	for (int i = 0; i < size; i++) 
+	{
+		if (arr[i] == key) 
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+int main() 
+{
+	int arr1[] = {1, 2, 3, 4, 5};
+	int size1 = 5;
+	int key1 = 3;
+	int result1 = linearSearch(arr1, size1, key1);
+
+	printf("Input 1:\n");
+	if (result1 != -1) {
+		printf("Found at index %d\n", result1);
+	} else 
+	{
+		printf("-1\n");
+	}
+	int arr2[] = {10, 20, 30, 40};
+	int size2 = 4;
+	int key2 = 25;
+	int result2 = linearSearch(arr2, size2, key2);
+
+	printf("\nInput 2:\n");
+	if (result2 != -1) {
+		printf("Found at index %d\n", result2);
+	} else 
+	{
+		printf("-1\n");
+	}
+	return 0;
+}

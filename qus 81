@@ -1,0 +1,35 @@
+Q81: Count characters in a string without using built-in length functions.
+
+/*
+Sample Test Cases:
+Input 1:
+Hello
+Output 1:
+5
+
+Input 2:
+ 
+Output 2:
+1
+
+*/
+#include <stdio.h>
+int string_length(const char *str) 
+{
+    int count = 0;
+    while (*str != '\0') {
+        count++;
+        str++;
+    }
+    return count;
+}
+int main() 
+{
+    char s1[] = "Hello";
+    char s2[] = " ";
+    char s3[] = "";
+    printf("The length of \"%s\" is %d\n", s1, string_length(s1));
+    printf("The length of \"%s\" is %d\n", s2, string_length(s2));
+    printf("The length of \"%s\" is %d\n", s3, string_length(s3));
+    return 0;
+}

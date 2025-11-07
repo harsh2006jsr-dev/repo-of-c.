@@ -1,0 +1,42 @@
+Q78: Find the sum of main diagonal elements for a square matrix.
+
+/*
+Sample Test Cases:
+Input 1:
+3 3
+1 2 3
+4 5 6
+7 8 9
+Output 1:
+15
+
+*/
+#include <stdio.h>
+int main() 
+{
+    int rows, cols;
+    printf("Enter the number of rows and columns: ");
+    scanf("%d %d", &rows, &cols);
+    if (rows != cols) 
+    {
+        printf("The matrix is not a square matrix. Cannot find the sum of the main diagonal.\n");
+        return 1; 
+    }
+
+    int matrix[rows][cols];
+    int diagonal_sum = 0;
+    printf("Enter the elements of the matrix:\n");
+    for (int i = 0; i < rows; i++) 
+    {
+        for (int j = 0; j < cols; j++) 
+        {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+    for (int i = 0; i < rows; i++) 
+    {
+        diagonal_sum += matrix[i][i];
+    }
+    printf("The sum of the main diagonal elements is: %d\n", diagonal_sum);
+    return 0;
+}

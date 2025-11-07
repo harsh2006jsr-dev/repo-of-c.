@@ -1,0 +1,17 @@
+Q2: Write a program to input two numbers and display their sum, difference, product, and quotient.
+
+#include <stdio.h>
+int main()
+{
+	double a,b;
+	printf("Entre 1s nos:");
+	scanf("%lf",&a);
+	printf("Entre 2nd nos:");
+	scanf("%lf",&b);
+	printf("\n--arithimertic result--\n");
+	printf("sum: %.2lf + %.2lf = %.2lf\n",a,b,a+b);
+	printf("difference:%.2lf - %2.lf = %.2lf\n",a,b,a-b);
+	printf("product:%.2lf * %.2lf = %.2lf\n",a,b,a*b);
+	printf("quotient:%.2lf/%.2lf=%.lf\n",a,b,a/b);
+	return 0;
+}

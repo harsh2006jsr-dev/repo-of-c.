@@ -1,0 +1,52 @@
+Q66: Insert an element in a sorted array at the appropriate position.
+
+/*
+Sample Test Cases:
+Input 1:
+5
+1 2 4 5 6
+3
+Output 1:
+1 2 3 4 5 6
+
+*/
+#include <stdio.h>
+
+int main() 
+{
+    int size, element, i, j, position;
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+    int arr[size + 1]; 
+    printf("Enter the elements of the sorted array:\n");
+    for (i = 0; i < size; i++) 
+    {
+        scanf("%d", &arr[i]);
+    }
+    printf("Enter the element to insert: ");
+    scanf("%d", &element);
+    for (i = 0; i < size; i++) 
+    {
+        if (arr[i] > element) 
+        {
+            position = i;
+            break;
+        }
+    }
+    if (i == size) 
+    {
+        position = size;
+    }
+    for (j = size; j > position; j--) 
+    {
+        arr[j] = arr[j - 1];
+    }
+    arr[position] = element;
+    printf("The modified array is:\n");
+    for (i = 0; i <= size; i++) 
+    {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    return 0;
+}

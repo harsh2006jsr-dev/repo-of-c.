@@ -1,0 +1,11 @@
+Q5: Write a program to convert temperature from Celsius to Fahrenheit.
+#include<stdio.h>
+int main()
+{
+    double celsius,fahreniet;
+    printf("entre temp in celsius:");
+    scanf("%lf",&celsius);
+    fahreniet=(celsius *9.0/5.0)+32;
+    printf("\n %.2lf celsius is equal to %2.lf fahreniet.\n",celsius,fahreniet);
+    return 0;
+}

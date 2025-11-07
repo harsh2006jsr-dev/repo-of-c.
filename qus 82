@@ -1,0 +1,30 @@
+Q82: Print each character of a string on a new line.
+
+/*
+Sample Test Cases:
+Input 1:
+Hi
+Output 1:
+H
+i
+
+*/
+
+#include <stdio.h>
+void print_characters_on_new_lines(const char *str) {
+    int i = 0;
+    while (str[i] != '\0') {
+        printf("%c\n", str[i]);
+        i++;
+    }
+}
+int main() 
+{
+    char s1[] = "Hi";
+    char s2[] = "Hello World";
+    printf("Printing characters for 'Hi':\n");
+    print_characters_on_new_lines(s1);
+    printf("\nPrinting characters for 'Hello World':\n");
+    print_characters_on_new_lines(s2);
+    return 0;
+}

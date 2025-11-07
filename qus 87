@@ -1,0 +1,48 @@
+Q87: Count spaces, digits, and special characters in a string.
+
+/*
+Sample Test Cases:
+Input 1:
+a b1&2
+Output 1:
+Spaces=1, Digits=2, Special=1
+
+*/
+#include <stdio.h>
+#include <string.h>
+void countCharacters(char *str) 
+{
+    int spaces = 0;
+    int digits = 0;
+    int specials = 0;
+    int i = 0;
+    while (str[i] != '\0') 
+    {
+        if (str[i] == ' ') 
+        {
+            spaces++;
+        }
+         else if (str[i] >= '0' && str[i] <= '9') 
+         {
+            digits++;
+        } 
+        else 
+        {
+            specials++;
+        }
+        i++;
+    }
+    printf("Spaces=%d, Digits=%d, Special=%d\n", spaces, digits, specials);
+}
+int main() 
+{
+    char str[100];
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+    if (str[strlen(str) - 1] == '\n') 
+    {
+        str[strlen(str) - 1] = '\0';
+    }
+    countCharacters(str);
+    return 0;
+}
